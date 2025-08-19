@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx shadcn add:*)",
+      "WebFetch(domain:ui.shadcn.com)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
