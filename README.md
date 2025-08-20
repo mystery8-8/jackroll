@@ -76,19 +76,45 @@ JackRoll uses a wallet-centric identity system where connecting your wallet crea
 
 ### 3.2 Authentication Rules & Requirements
 
-**🔐 Logged-In User Requirements:**
-- ✅ **Wallet Connection Required**: Users MUST connect wallet to access core features
-- ✅ **Chat Access**: Only wallet-connected users can participate in community chat
-- ✅ **Pot Participation**: All pot interactions require wallet authentication
-- ✅ **Profile Creation**: Wallet connection automatically creates user profile
-- ✅ **Transaction Signing**: All interactions require wallet signature approval
+**🔐 Logged-In User Capabilities:**
+- ✅ **Full App Access**: Complete access to all features and interactions
+- ✅ **Chat Participation**: Can view and send messages in community chat
+- ✅ **Pot Interactions**: Can enter pots, place NFTs, and participate in games
+- ✅ **Profile & Stats**: Automatic profile creation with activity tracking
+- ✅ **Transaction Signing**: All blockchain interactions with wallet signatures
 
-**🚫 Guest User Limitations:**
-- ❌ Cannot participate in chat
-- ❌ Cannot enter pots or place NFTs
-- ❌ Cannot view detailed pot information
-- ❌ Limited to read-only browsing experience
-- ❌ No social features or interactions
+**👀 Guest User Experience (View-Only Mode):**
+- ✅ **Browse Interface**: Can explore the entire application interface
+- ✅ **View Pots**: Can see all active pots and their current states
+- ✅ **Read Chat**: Can view all chat messages and conversations
+- ✅ **Monitor Activity**: Can watch games in progress and see results
+
+**🚫 Guest User Restrictions (Interaction Blocked):**
+- ❌ **Chat Sending**: Cannot send messages (prompted to login when attempted)
+- ❌ **Pot Participation**: Cannot enter pots or place NFTs (login prompt appears)
+- ❌ **Profile Actions**: No stats tracking, favorites, or personalization
+- ❌ **Social Features**: Cannot add friends or participate in social activities
+- ❌ **Any Transactions**: All wallet-requiring actions trigger login prompts
+
+### 3.2.1 User Experience Flow for Non-Authenticated Users
+
+**Login Prompt Strategy:**
+When guests attempt restricted actions, they encounter contextual prompts:
+
+1. **Chat Message Attempt**: 
+   - Input field shows "Connect wallet to send messages"
+   - Click triggers wallet connection flow
+   - Clear messaging: "Join the conversation by connecting your wallet"
+
+2. **Pot Interaction Attempt**:
+   - Buttons show "Connect Wallet to Play" instead of "Enter Pot"
+   - Hover states explain wallet requirement
+   - Modal appears: "Connect your wallet to participate in pots"
+
+3. **Transaction Actions**:
+   - All interactive elements gracefully prompt for wallet connection
+   - No broken states - everything is accessible but gated
+   - Seamless transition from guest to authenticated user
 
 ### 3.3 User Profile System
 

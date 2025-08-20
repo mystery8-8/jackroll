@@ -67,12 +67,24 @@ export function JackRollLayout({ children }: JackRollLayoutProps) {
   const [selectedPot, setSelectedPot] = useState("degen")
   const [selectedCategory, setSelectedCategory] = useState("low-tier")
   const [chatMessage, setChatMessage] = useState("")
-  const { authenticated, ready } = usePrivy()
+  const { authenticated, ready, login } = usePrivy()
 
   const handleSendMessage = () => {
+    if (!ready || !authenticated) {
+      // Prompt user to connect wallet
+      return
+    }
+    
     if (chatMessage.trim()) {
       // In real app, this would send to chat
       setChatMessage("")
+    }
+  }
+
+  const handleInputClick = () => {
+    if (!ready || !authenticated) {
+      // Trigger wallet connection when user clicks input
+      login()
     }
   }
 
@@ -194,6 +206,8 @@ export function JackRollLayout({ children }: JackRollLayoutProps) {
                 <TrendingUp className="h-3 w-3" />
                 $12.5k in pots
               </Badge>
+              <ConnectWallet />
+              <ThemeToggle />
             </div>
           </div>
 
@@ -253,10 +267,20 @@ export function JackRollLayout({ children }: JackRollLayoutProps) {
                               {/* Action Button */}
                               <Button 
                                 className="w-full" 
-                                variant={i % 4 === 0 ? "secondary" : "default"}
+                                variant={i % 4 === 0 ? "secondary" : (ready && authenticated ? "default" : "outline")}
                                 disabled={i % 4 === 0}
+                                onClick={() => {
+                                  if (!ready || !authenticated) {
+                                    login()
+                                  } else {
+                                    // Join pot logic here
+                                  }
+                                }}
                               >
-                                {i % 4 === 0 ? "Rolling..." : "Join Pot"}
+                                {i % 4 === 0 
+                                  ? "Rolling..." 
+                                  : (ready && authenticated ? "Join Pot" : "Connect to Play")
+                                }
                               </Button>
                             </CardContent>
                           </Card>
@@ -274,17 +298,12 @@ export function JackRollLayout({ children }: JackRollLayoutProps) {
         <div className="w-80 border-l border-border bg-card flex flex-col">
           {/* Chat Header */}
           <div className="p-4 border-b border-border flex-shrink-0">
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between">
               <h3 className="font-semibold">Global Chat</h3>
               <Badge variant="secondary" className="gap-1">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                 <span className="animate-slow-pulse-text">Live</span>
               </Badge>
-            </div>
-            {/* Wallet & Theme Controls */}
-            <div className="flex items-center gap-2">
-              <ConnectWallet />
-              <ThemeToggle />
             </div>
           </div>
 
@@ -308,28 +327,44 @@ export function JackRollLayout({ children }: JackRollLayoutProps) {
 
           {/* Chat Input */}
           <div className="p-4 border-t border-border flex-shrink-0">
-            {ready && authenticated ? (
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Type a message..."
-                  value={chatMessage}
-                  onChange={(e) => setChatMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                  className="flex-1"
-                />
-                <Button size="sm" onClick={handleSendMessage}>
-                  <Send className="h-4 w-4" />
-                </Button>
-              </div>
-            ) : (
-              <div className="text-center py-3 px-4 bg-muted rounded-lg">
-                <p className="text-sm text-muted-foreground mb-2">
-                  🔒 Connect your wallet to join the conversation
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Your wallet address becomes your chat identity
-                </p>
-              </div>
+            <div className="flex gap-2">
+              <Input
+                placeholder={
+                  ready && authenticated 
+                    ? "Type a message..." 
+                    : "Connect wallet to send messages"
+                }
+                value={ready && authenticated ? chatMessage : ""}
+                onChange={(e) => {
+                  if (ready && authenticated) {
+                    setChatMessage(e.target.value)
+                  }
+                }}
+                onClick={handleInputClick}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    if (ready && authenticated) {
+                      handleSendMessage()
+                    } else {
+                      handleInputClick()
+                    }
+                  }
+                }}
+                className="flex-1 cursor-pointer"
+                readOnly={!ready || !authenticated}
+              />
+              <Button 
+                size="sm" 
+                onClick={ready && authenticated ? handleSendMessage : handleInputClick}
+                variant={ready && authenticated ? "default" : "outline"}
+              >
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
+            {(!ready || !authenticated) && (
+              <p className="text-xs text-muted-foreground mt-2 text-center">
+                🔒 Connect your wallet to join the conversation
+              </p>
             )}
           </div>
         </div>
