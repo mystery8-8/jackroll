@@ -407,6 +407,143 @@ When guests attempt restricted actions, they encounter contextual prompts:
 - **Exclusive Pots**: Special pots for high-activity users
 - **NFT Drops**: Periodic airdrops to active users
 
+### 8.4 Referral System - "Bring Your Crew"
+
+**Core Philosophy: Web3-Native Viral Growth**
+JackRoll's referral system leverages blockchain transparency and gaming mechanics to create sustainable, genuine user growth while rewarding community builders.
+
+#### 8.4.1 Referral Code Generation & Sharing
+
+**Unique Referral Codes:**
+- **Auto-Generated**: Based on wallet address (e.g., `JACK-1A2B3C-4D5E`)
+- **Custom Codes**: Premium users can claim custom codes (e.g., `JACK-CRYPTO-KING`)
+- **QR Codes**: Mobile-friendly sharing with embedded referral links
+- **Social Integration**: One-click sharing to Twitter, Discord, Telegram
+
+**Referral Links:**
+- Format: `jackroll.io/r/JACK-1A2B3C-4D5E`
+- Deep links to specific pot types or features
+- Trackable UTM parameters for analytics
+- Expires after 30 days of inactivity
+
+#### 8.4.2 Multi-Tier Reward Structure
+
+**Tier 1 - Direct Referrals (Lifetime Rewards):**
+- **5% of platform fees** from referred user's pot participation
+- **Bonus Multipliers**: 
+  - First 10 referrals: 1.5x multiplier
+  - 25+ active referrals: 2x multiplier
+  - 50+ active referrals: 2.5x multiplier (Elite Status)
+
+**Tier 2 - Second-Level Referrals:**
+- **2% of platform fees** from users referred by your referrals
+- Encourages building referral networks
+- Maximum depth of 2 levels to prevent pyramid schemes
+
+**Volume-Based Bonuses:**
+- **Bronze Tier** (10 ETH referred volume): 10% bonus on all rewards
+- **Silver Tier** (50 ETH referred volume): 20% bonus + exclusive NFT
+- **Gold Tier** (100 ETH referred volume): 30% bonus + custom referral code
+- **Platinum Tier** (500 ETH referred volume): 50% bonus + revenue share increase
+
+#### 8.4.3 On-Chain Implementation & Transparency
+
+**Smart Contract Architecture:**
+- **Referral Registry**: Immutable on-chain tracking of all referral relationships
+- **Reward Distribution**: Automatic distribution of referral rewards
+- **Vesting Schedule**: 30-day vesting for large rewards to prevent abuse
+- **Audit Trail**: Public verification of all referral transactions
+
+**Real-Time Tracking:**
+- Live dashboard showing referral performance
+- Historical earnings and trends
+- Referral conversion rates and activity metrics
+- Transparent leaderboards updated in real-time
+
+#### 8.4.4 Gamification & Social Proof
+
+**Referral Achievements:**
+- **"Talent Scout"**: Refer your first active user
+- **"Network Builder"**: 5 active referrals playing simultaneously  
+- **"Community Leader"**: 25 total referrals with $10K+ volume
+- **"Jackroll Ambassador"**: Top 1% of referrers globally
+- **"Dynasty Builder"**: 100+ multi-tier referral network
+
+**Seasonal Competitions:**
+- **Monthly Referral Races**: Top referrers win exclusive NFTs
+- **Quarterly Challenges**: Special themed competitions with mega prizes
+- **Annual Championships**: Elite status and revenue sharing upgrades
+
+**Social Features:**
+- **Referral Stories**: Share success stories and big wins
+- **Mentor System**: Top referrers help newcomers
+- **Referral Parties**: Group events for successful referral networks
+
+#### 8.4.5 Anti-Abuse & Quality Control
+
+**Sybil Attack Prevention:**
+- **Wallet Age Verification**: Minimum 30-day wallet age requirement
+- **Activity Thresholds**: Referred users must play minimum 3 pots to qualify
+- **KYC Integration**: Optional identity verification for high-value referrers
+- **Behavioral Analysis**: ML detection of suspicious referral patterns
+
+**Quality Metrics:**
+- **Active User Definition**: Users who participate in pots within 30 days
+- **Minimum Volume**: $50 minimum referred user activity for rewards
+- **Retention Tracking**: Bonus rewards for referred users who stay active 90+ days
+- **Manual Review**: Large reward claims subject to team verification
+
+**Rate Limiting:**
+- Maximum 100 new referral registrations per wallet per month
+- Cooling period between large reward claims
+- Progressive verification requirements for high-volume referrers
+
+#### 8.4.6 Integration with Existing Systems
+
+**Profile Integration:**
+- Referral dashboard in user profile
+- Real-time earnings tracking
+- Referral network visualization
+- Performance analytics and insights
+
+**Gamification Synergy:**
+- Referral achievements count toward overall XP
+- Special leaderboard categories for referrers
+- Referral-specific daily/weekly challenges
+- Cross-promotion with other engagement features
+
+**Social Features Enhancement:**
+- Referral-based friend suggestions
+- Private pots for referral networks
+- Exclusive chat channels for referral communities
+- Special events for successful referrer groups
+
+#### 8.4.7 Technical Implementation Roadmap
+
+**Phase 1: Core Infrastructure**
+- Smart contract development and testing
+- Referral code generation system
+- Basic tracking and reward distribution
+- Integration with existing user authentication
+
+**Phase 2: Advanced Features**
+- Multi-tier reward calculations
+- Volume bonus tracking
+- Achievement system integration
+- Real-time analytics dashboard
+
+**Phase 3: Social & Gamification**
+- Leaderboards and competitions
+- Social sharing optimization
+- Advanced anti-abuse mechanisms
+- Mobile-optimized referral flows
+
+**Phase 4: Optimization & Scale**
+- Performance optimization for high volume
+- Advanced analytics and insights
+- A/B testing framework for referral mechanics
+- Integration with external marketing tools
+
 ---
 
 ## 9. Scalability Considerations

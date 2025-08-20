@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, User, Wallet, Trophy, TrendingUp, Clock, Copy } from 'lucide-react';
+import { ArrowLeft, User, Wallet, Trophy, TrendingUp, Clock, Copy, Share2, Users, Gift, Star, QrCode, Twitter, MessageCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function ProfilePage() {
@@ -32,6 +32,28 @@ export default function ProfilePage() {
 
   const handleBackToGame = () => {
     router.push('/');
+  };
+
+  const handleCopyReferralCode = async (code: string) => {
+    try {
+      const referralLink = `https://jackroll.io/r/${code}`;
+      await navigator.clipboard.writeText(referralLink);
+      toast.success('Referral link copied to clipboard!');
+    } catch (error) {
+      toast.error('Failed to copy referral link');
+    }
+  };
+
+  const handleShareToTwitter = (code: string) => {
+    const text = encodeURIComponent(`🎲 Join me on JackRoll - the ultimate NFT gaming platform! Use my referral code: ${code}\n\nStake NFTs, win big, and experience true Web3 gaming! 🚀`);
+    const url = encodeURIComponent(`https://jackroll.io/r/${code}`);
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+  };
+
+  const handleShareToDiscord = (code: string) => {
+    const message = `🎲 **JackRoll Invitation** 🎲\n\nJoin me on the ultimate NFT gaming platform!\n\n🔗 Use referral code: **${code}**\n🎯 Stake NFTs, win big, experience true Web3 gaming!\n\n👉 https://jackroll.io/r/${code}`;
+    navigator.clipboard.writeText(message);
+    toast.success('Discord message copied to clipboard!');
   };
 
   if (!ready || !authenticated || !user) {
@@ -58,6 +80,29 @@ export default function ProfilePage() {
     joinDate: 'November 2024',
     reputation: 'Trusted Trader',
     longestStreak: 7
+  };
+
+  // Mock referral data
+  const mockReferralData = {
+    referralCode: `JACK-${walletAddress?.slice(2, 8).toUpperCase()}-${walletAddress?.slice(-4).toUpperCase()}`,
+    customCode: null, // Premium feature
+    totalReferrals: 12,
+    activeReferrals: 8,
+    totalEarnings: 2.34,
+    thisMonthEarnings: 0.89,
+    referralVolume: 45.2,
+    tier: 'Bronze',
+    nextTierProgress: 65, // % to next tier
+    achievements: [
+      { id: 1, name: 'Talent Scout', description: 'Referred your first user', unlocked: true },
+      { id: 2, name: 'Network Builder', description: '5+ active referrals', unlocked: true },
+      { id: 3, name: 'Community Leader', description: '25+ total referrals', unlocked: false },
+    ],
+    recentReferrals: [
+      { address: '0x1234...5678', joinDate: '2 days ago', volume: 2.1, active: true },
+      { address: '0xABCD...EFGH', joinDate: '1 week ago', volume: 5.7, active: true },
+      { address: '0x9876...4321', joinDate: '2 weeks ago', volume: 1.2, active: false },
+    ]
   };
 
   return (
@@ -235,6 +280,165 @@ export default function ProfilePage() {
                       </div>
                     </div>
                   ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Referral Dashboard */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Referral Program - "Bring Your Crew"</CardTitle>
+                <CardDescription>Earn rewards by inviting friends to JackRoll</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Referral Code & Sharing */}
+                <div className="space-y-4">
+                  <div>
+                    <div className="text-sm font-medium mb-2">Your Referral Code</div>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 bg-muted p-3 rounded-md font-mono text-sm">
+                        {mockReferralData.referralCode}
+                      </div>
+                      <Button
+                        size="sm"
+                        onClick={() => handleCopyReferralCode(mockReferralData.referralCode)}
+                        className="bg-[#f7931a] hover:bg-[#e8860f] text-black"
+                      >
+                        <Copy className="h-4 w-4 mr-1" />
+                        Copy Link
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleShareToTwitter(mockReferralData.referralCode)}
+                      className="flex-1"
+                    >
+                      <Twitter className="h-4 w-4 mr-2" />
+                      Share on X
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleShareToDiscord(mockReferralData.referralCode)}
+                      className="flex-1"
+                    >
+                      <MessageCircle className="h-4 w-4 mr-2" />
+                      Discord
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="flex-1"
+                    >
+                      <QrCode className="h-4 w-4 mr-2" />
+                      QR Code
+                    </Button>
+                  </div>
+                </div>
+
+                <Separator />
+
+                {/* Referral Stats */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="text-center space-y-1">
+                    <div className="text-2xl font-bold text-[#f7931a]">{mockReferralData.totalReferrals}</div>
+                    <div className="text-xs text-muted-foreground">Total Referrals</div>
+                  </div>
+                  <div className="text-center space-y-1">
+                    <div className="text-2xl font-bold text-green-600">{mockReferralData.activeReferrals}</div>
+                    <div className="text-xs text-muted-foreground">Active This Month</div>
+                  </div>
+                  <div className="text-center space-y-1">
+                    <div className="text-2xl font-bold">{mockReferralData.totalEarnings} ETH</div>
+                    <div className="text-xs text-muted-foreground">Total Earned</div>
+                  </div>
+                  <div className="text-center space-y-1">
+                    <div className="text-2xl font-bold">{mockReferralData.referralVolume} ETH</div>
+                    <div className="text-xs text-muted-foreground">Referred Volume</div>
+                  </div>
+                </div>
+
+                <Separator />
+
+                {/* Tier Progress */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium">Referral Tier: {mockReferralData.tier}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {mockReferralData.nextTierProgress}% to Silver Tier
+                      </div>
+                    </div>
+                    <Badge variant="secondary" className="bg-amber-100 text-amber-800">
+                      {mockReferralData.tier}
+                    </Badge>
+                  </div>
+                  <div className="w-full bg-muted rounded-full h-2">
+                    <div 
+                      className="bg-[#f7931a] h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${mockReferralData.nextTierProgress}%` }}
+                    />
+                  </div>
+                </div>
+
+                <Separator />
+
+                {/* Achievements */}
+                <div className="space-y-3">
+                  <div className="font-medium">Referral Achievements</div>
+                  <div className="grid gap-2">
+                    {mockReferralData.achievements.map((achievement) => (
+                      <div 
+                        key={achievement.id}
+                        className={`flex items-center gap-3 p-2 rounded-md ${
+                          achievement.unlocked ? 'bg-green-50 border border-green-200' : 'bg-muted/50'
+                        }`}
+                      >
+                        <div className={`h-8 w-8 rounded-full flex items-center justify-center ${
+                          achievement.unlocked ? 'bg-green-500' : 'bg-muted-foreground/20'
+                        }`}>
+                          <Star className={`h-4 w-4 ${achievement.unlocked ? 'text-white' : 'text-muted-foreground'}`} />
+                        </div>
+                        <div className="flex-1">
+                          <div className={`font-medium text-sm ${achievement.unlocked ? 'text-green-700' : 'text-muted-foreground'}`}>
+                            {achievement.name}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            {achievement.description}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <Separator />
+
+                {/* Recent Referrals */}
+                <div className="space-y-3">
+                  <div className="font-medium">Recent Referrals</div>
+                  <div className="space-y-2">
+                    {mockReferralData.recentReferrals.map((referral, i) => (
+                      <div key={i} className="flex items-center justify-between py-2 border-b border-border last:border-b-0">
+                        <div className="flex items-center gap-3">
+                          <div className={`h-2 w-2 rounded-full ${referral.active ? 'bg-green-500' : 'bg-gray-400'}`} />
+                          <div>
+                            <div className="font-medium text-sm font-mono">{referral.address}</div>
+                            <div className="text-xs text-muted-foreground">
+                              Joined {referral.joinDate} • {referral.volume} ETH volume
+                            </div>
+                          </div>
+                        </div>
+                        <Badge variant={referral.active ? "default" : "secondary"}>
+                          {referral.active ? "Active" : "Inactive"}
+                        </Badge>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </CardContent>
             </Card>
