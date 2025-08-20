@@ -113,12 +113,17 @@ export function JackRollLayout({ children }: JackRollLayoutProps) {
                       {isLeftSidebarOpen && (
                         <div className="text-left flex-1">
                           <div className="flex items-center justify-between">
-                            <div className="font-medium">{pot.name}</div>
-                            <Badge variant="outline" className={pot.color}>
-                              {pot.risk}
+                            <div className="font-bold text-base">{pot.name}</div>
+                            <Badge 
+                              variant={selectedPot === pot.id ? "secondary" : "outline"} 
+                              className={selectedPot === pot.id ? pot.color : `${pot.color} border-current`}
+                            >
+                              <span className="animate-slow-pulse-text">{pot.risk}</span>
                             </Badge>
                           </div>
-                          <div className="text-xs text-muted-foreground mt-1">{pot.description}</div>
+                          <div className={`text-xs mt-1 ${selectedPot === pot.id ? 'text-white/90' : 'text-muted-foreground'}`}>
+                            {pot.description}
+                          </div>
                         </div>
                       )}
                     </Button>
@@ -154,11 +159,28 @@ export function JackRollLayout({ children }: JackRollLayoutProps) {
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Header */}
           <div className="h-16 border-b border-border bg-card px-6 flex items-center justify-between flex-shrink-0">
-            <div>
-              <h1 className="text-xl font-bold">JackRoll</h1>
-              <p className="text-sm text-muted-foreground">
-                {potTypes.find(p => p.id === selectedPot)?.name || "Select a game mode"}
-              </p>
+            <div className="flex items-center gap-4">
+              <div>
+                <h1 className="text-xl font-bold">JackRoll</h1>
+                <p className="text-sm text-muted-foreground">
+                  {potTypes.find(p => p.id === selectedPot)?.name || "Select a game mode"}
+                </p>
+              </div>
+              {!isLeftSidebarOpen && (
+                <div className="flex gap-1">
+                  {potCategories.map((category) => (
+                    <Button
+                      key={category.id}
+                      variant={selectedCategory === category.id ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setSelectedCategory(category.id)}
+                      className="text-xs"
+                    >
+                      {category.name}
+                    </Button>
+                  ))}
+                </div>
+              )}
             </div>
             <div className="flex items-center gap-4">
               <Badge variant="secondary" className="gap-1">
@@ -253,7 +275,7 @@ export function JackRollLayout({ children }: JackRollLayoutProps) {
               <h3 className="font-semibold">Global Chat</h3>
               <Badge variant="secondary" className="gap-1">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                Live
+                <span className="animate-slow-pulse-text">Live</span>
               </Badge>
             </div>
           </div>

@@ -147,10 +147,13 @@ Jackroll is a decentralized NFT gaming platform where users can participate in d
 
 ### 4.3 UI Inspiration & Guidelines
 - **Reference**: Gondi.xyz for clean, modern Web3 aesthetics
-- **Typography**: Clean, readable fonts with strong hierarchy
-- **Spacing**: Generous whitespace for clarity
+- **Design Philosophy**: Apple-inspired clean UI/UX design across the entire application
+- **Typography**: Helvetica Now for premium, crisp readability with spurless G and straight-legged R variants
+- **Spacing**: Generous whitespace for clarity and breathing room
 - **Components**: Card-based design with subtle shadows/borders
-- **Interactions**: Smooth hover states and transitions
+- **Interactions**: Smooth hover states and micro-interactions
+- **Visual Hierarchy**: Clear, minimalist interface with strong attention to detail
+- **Font Smoothing**: Anti-aliased text rendering for premium feel
 
 ---
 
