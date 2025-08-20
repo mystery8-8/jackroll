@@ -3,14 +3,15 @@
 ## Table of Contents
 1. [Project Overview](#project-overview)
 2. [Technical Stack & Infrastructure](#technical-stack--infrastructure)
-3. [Architecture & Development Approach](#architecture--development-approach)
-4. [User Interface Design](#user-interface-design)
-5. [Pot System - Core Functionality](#pot-system---core-functionality)
-6. [User Journey & Lifecycle](#user-journey--lifecycle)
-7. [Randomness & Trust Architecture](#randomness--trust-architecture)
-8. [Engagement & Retention Features](#engagement--retention-features)
-9. [Scalability Considerations](#scalability-considerations)
-10. [Development Roadmap](#development-roadmap)
+3. [User Authentication & Profile System](#user-authentication--profile-system)
+4. [Architecture & Development Approach](#architecture--development-approach)
+5. [User Interface Design](#user-interface-design)
+6. [Pot System - Core Functionality](#pot-system---core-functionality)
+7. [User Journey & Lifecycle](#user-journey--lifecycle)
+8. [Randomness & Trust Architecture](#randomness--trust-architecture)
+9. [Engagement & Retention Features](#engagement--retention-features)
+10. [Scalability Considerations](#scalability-considerations)
+11. [Development Roadmap](#development-roadmap)
 
 ---
 
@@ -62,16 +63,81 @@ Jackroll is a decentralized NFT gaming platform where users can participate in d
 
 ---
 
-## 3. Architecture & Development Approach
+## 3. User Authentication & Profile System
 
-### 3.1 Development Philosophy
+### 3.1 Wallet-Based Identity System
+**Core Philosophy: Your Wallet = Your Profile**
+
+JackRoll uses a wallet-centric identity system where connecting your wallet creates your user profile. This approach ensures:
+- **Decentralized Identity**: No traditional usernames/passwords - your wallet address is your identity
+- **Cross-Platform Consistency**: Same identity across all Web3 platforms
+- **Security**: Private key ownership provides maximum security
+- **Transparency**: All actions are tied to verifiable on-chain addresses
+
+### 3.2 Authentication Rules & Requirements
+
+**🔐 Logged-In User Requirements:**
+- ✅ **Wallet Connection Required**: Users MUST connect wallet to access core features
+- ✅ **Chat Access**: Only wallet-connected users can participate in community chat
+- ✅ **Pot Participation**: All pot interactions require wallet authentication
+- ✅ **Profile Creation**: Wallet connection automatically creates user profile
+- ✅ **Transaction Signing**: All interactions require wallet signature approval
+
+**🚫 Guest User Limitations:**
+- ❌ Cannot participate in chat
+- ❌ Cannot enter pots or place NFTs
+- ❌ Cannot view detailed pot information
+- ❌ Limited to read-only browsing experience
+- ❌ No social features or interactions
+
+### 3.3 User Profile System
+
+**Profile Components:**
+- **Primary Identity**: Wallet address (abbreviated as 0x1234...5678)
+- **Activity Stats**: 
+  - Total pots entered
+  - Win/loss ratio
+  - Favorite pot types
+  - Total volume traded
+- **Social Features**:
+  - Chat participation history
+  - Friend connections (other wallet addresses)
+  - Reputation score based on activity
+- **NFT Portfolio**: Display connected wallet's NFT collection
+- **Transaction History**: On-chain record of all pot participations
+
+**Profile Benefits:**
+- **Persistent Identity**: Profile follows you across sessions and devices
+- **Trust Building**: Activity history builds reputation in community
+- **Personalization**: UI adapts based on user preferences and history
+- **Social Connections**: Build network of trusted trading partners
+
+### 3.4 Security & Privacy Considerations
+
+**Security Measures:**
+- **Wallet Signature Verification**: All actions require cryptographic proof
+- **Session Management**: Secure session handling with wallet state
+- **Transaction Validation**: Smart contract validation for all interactions
+- **Privacy Options**: Users can choose visibility levels for profile data
+
+**Best Practices:**
+- **Burner Wallets Recommended**: Use dedicated wallet for gaming activities
+- **Hardware Wallet Support**: Full support for Ledger, Trezor, etc.
+- **Multi-Wallet Support**: Easy switching between different wallet addresses
+- **Logout Protection**: Secure logout clears all session data
+
+---
+
+## 4. Architecture & Development Approach
+
+### 4.1 Development Philosophy
 **UI/UX First Approach**
 1. Complete visual design and user experience
 2. Implement all frontend components and interactions
 3. Add smart contract integration after UI is polished
 4. Maintain modularity for easy integration
 
-### 3.2 Core Design Principles
+### 4.2 Core Design Principles
 
 **1. Separation of Concerns**
 - Domain Layer: Pure business logic
@@ -90,7 +156,7 @@ Jackroll is a decentralized NFT gaming platform where users can participate in d
 - Reusable UI components
 - Shared utilities and configurations
 
-### 3.3 Development Strategy
+### 4.3 Development Strategy
 
 **Phase 1: UI/UX Design & Implementation**
 - Create comprehensive design system

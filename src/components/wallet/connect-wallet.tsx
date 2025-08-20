@@ -1,13 +1,19 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { usePrivy } from '@privy-io/react-auth';
 import { Button } from '@/components/ui/button';
 import { Wallet, LogOut } from 'lucide-react';
 
 export function ConnectWallet() {
+  const [mounted, setMounted] = useState(false);
   const { login, logout, ready, authenticated, user } = usePrivy();
 
-  if (!ready) {
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted || !ready) {
     return (
       <Button disabled className="bg-[#f7931a] hover:bg-[#e8860f]">
         Loading...

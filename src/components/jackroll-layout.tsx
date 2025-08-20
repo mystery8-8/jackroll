@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { ConnectWallet } from "@/components/wallet/connect-wallet"
+import { usePrivy } from '@privy-io/react-auth'
 import { 
   PanelLeftClose, 
   PanelLeftOpen, 
@@ -66,6 +67,7 @@ export function JackRollLayout({ children }: JackRollLayoutProps) {
   const [selectedPot, setSelectedPot] = useState("degen")
   const [selectedCategory, setSelectedCategory] = useState("low-tier")
   const [chatMessage, setChatMessage] = useState("")
+  const { authenticated, ready } = usePrivy()
 
   const handleSendMessage = () => {
     if (chatMessage.trim()) {
@@ -272,12 +274,17 @@ export function JackRollLayout({ children }: JackRollLayoutProps) {
         <div className="w-80 border-l border-border bg-card flex flex-col">
           {/* Chat Header */}
           <div className="p-4 border-b border-border flex-shrink-0">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-3">
               <h3 className="font-semibold">Global Chat</h3>
               <Badge variant="secondary" className="gap-1">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                 <span className="animate-slow-pulse-text">Live</span>
               </Badge>
+            </div>
+            {/* Wallet & Theme Controls */}
+            <div className="flex items-center gap-2">
+              <ConnectWallet />
+              <ThemeToggle />
             </div>
           </div>
 
@@ -301,18 +308,29 @@ export function JackRollLayout({ children }: JackRollLayoutProps) {
 
           {/* Chat Input */}
           <div className="p-4 border-t border-border flex-shrink-0">
-            <div className="flex gap-2">
-              <Input
-                placeholder="Type a message..."
-                value={chatMessage}
-                onChange={(e) => setChatMessage(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                className="flex-1"
-              />
-              <Button size="sm" onClick={handleSendMessage}>
-                <Send className="h-4 w-4" />
-              </Button>
-            </div>
+            {ready && authenticated ? (
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Type a message..."
+                  value={chatMessage}
+                  onChange={(e) => setChatMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  className="flex-1"
+                />
+                <Button size="sm" onClick={handleSendMessage}>
+                  <Send className="h-4 w-4" />
+                </Button>
+              </div>
+            ) : (
+              <div className="text-center py-3 px-4 bg-muted rounded-lg">
+                <p className="text-sm text-muted-foreground mb-2">
+                  🔒 Connect your wallet to join the conversation
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Your wallet address becomes your chat identity
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -326,10 +344,6 @@ export function JackRollLayout({ children }: JackRollLayoutProps) {
             <a href="#" className="text-sm text-muted-foreground hover:text-primary">Discord</a>
             <a href="#" className="text-sm text-muted-foreground hover:text-primary">Docs</a>
           </div>
-        </div>
-        <div className="flex items-center gap-3">
-          <ConnectWallet />
-          <ThemeToggle />
         </div>
       </div>
     </div>
