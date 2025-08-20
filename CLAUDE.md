@@ -3,10 +3,12 @@
 ## Git Workflow Instructions
 - **ALWAYS** run `git pull` before creating any new branch
 - **ALWAYS** push completed features to remote
+- **ALWAYS** merge completed feature branches into master before creating new feature branches
 - Pull and push every time we create new branches and features
 - Follow the feature branch strategy documented in README.md
 - Branch naming: `feature/name`, `fix/name`, `refactor/name`, `docs/name`
 - **Commit messages should only mention user, NOT Claude or AI assistance**
+- **Feature Branch Workflow**: Complete feature → Merge to master → Create new feature branch
 
 ## Token Efficiency Instructions
 - **ALWAYS** read .md files with limits to avoid wasting tokens
