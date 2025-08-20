@@ -391,6 +391,26 @@ Jackroll is a decentralized NFT gaming platform where users can participate in d
 
 ---
 
+## Development Workflow
+
+### Feature Branch Strategy
+Each new feature or major change should be developed on a separate branch to maintain code quality and enable collaborative development:
+
+1. **Create Feature Branch**: `git checkout -b feature/feature-name`
+2. **Development**: Make changes and commits on the feature branch
+3. **Testing**: Ensure all tests pass and code meets quality standards
+4. **Pull Request**: Create PR to merge into main branch
+5. **Code Review**: Team review and approval process
+6. **Merge**: Integrate feature into main codebase
+
+**Branch Naming Convention:**
+- `feature/wallet-integration` - New features
+- `fix/bug-description` - Bug fixes
+- `refactor/component-name` - Code refactoring
+- `docs/update-readme` - Documentation updates
+
+---
+
 ## Next Steps
 
 1. **Create Comprehensive UI/UX Design**

@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { ConnectWallet } from "@/components/wallet/connect-wallet"
 import { 
   PanelLeftClose, 
   PanelLeftOpen, 
@@ -326,7 +327,10 @@ export function JackRollLayout({ children }: JackRollLayoutProps) {
             <a href="#" className="text-sm text-muted-foreground hover:text-primary">Docs</a>
           </div>
         </div>
-        <ThemeToggle />
+        <div className="flex items-center gap-3">
+          <ConnectWallet />
+          <ThemeToggle />
+        </div>
       </div>
     </div>
   )
