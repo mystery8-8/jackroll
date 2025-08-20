@@ -222,7 +222,7 @@ export function JackRollLayout({ children }: JackRollLayoutProps) {
                               {/* Pot Value */}
                               <div className="text-center">
                                 <div className="text-sm text-muted-foreground">Total Value</div>
-                                <div className="font-semibold">{(Math.random() * 2 + 0.1).toFixed(2)} ETH</div>
+                                <div className="font-semibold">{((i * 0.3) + 0.1).toFixed(2)} ETH</div>
                               </div>
                               
                               {/* Action Button */}
