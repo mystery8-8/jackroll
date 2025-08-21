@@ -25,6 +25,12 @@ Jackroll is a decentralized NFT gaming platform where users can participate in d
 - **Two pot types**: Degen (safe swap) and Jacked (winner-takes-all)
 - **Verified randomness** on-chain using Gelato VRF for complete transparency
 - **Real-time chat** for community engagement
+
+### 🚨 **CRITICAL: Chat System Architecture**
+- **TEMPORARY MESSAGES ONLY**: All chat messages auto-delete after 24 hours
+- **SINGLE GLOBAL CHAT**: Only one public chat room for all users - no private chats
+- **NO PERSISTENT STORAGE**: Messages are not stored in database - they expire automatically
+- **EPHEMERAL DESIGN**: Focus on live real-time conversation, not message history
 - **NFT verification** through OpenSea and Magic Eden integration
 - **Shareable pot links** with unique IDs for social engagement
 - **Interactive spinning wheel** during randomness generation

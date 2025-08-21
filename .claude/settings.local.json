@@ -3,9 +3,28 @@
     "allow": [
       "Bash(npx shadcn add:*)",
       "WebFetch(domain:ui.shadcn.com)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(claude-code /doctor)",
+      "Bash(powershell:*)",
+      "WebSearch",
+      "Bash(where npm)",
+      "Bash(cursor:*)",
+      "Bash(echo $PATH)",
+      "Bash(/usr/bin/git --version)",
+      "Bash(/usr/bin/env git --version)",
+      "Bash(/usr/local/bin/git --version)",
+      "Bash(/opt/homebrew/bin/git --version)",
+      "Bash(export:*)",
+      "Bash(git --version)",
+      "Bash(xcrun git --version)",
+      "Bash(where git)"
     ],
     "deny": [],
-    "ask": []
+    "ask": [],
+    "additionalDirectories": [
+      "C:\\",
+      "C:\\usr",
+      "C:\\opt\\homebrew\\bin"
+    ]
   }
 }

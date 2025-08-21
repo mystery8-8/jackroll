@@ -27,13 +27,12 @@
 - **DOUBLE-CHECK** user types, fee structures, and system requirements in README.md
 - Inaccurate information costs time and money - verify everything against documentation
 
-## Development Server Instructions
+## Terminal and Development Server Instructions
 - **ALWAYS** use port 3000 for development server
 - **ALWAYS** kill port 3000 processes before starting dev server automatically
 - **NEVER** ask user to kill processes - do it in ONE command
 - Port 3000 sometimes gets cached, so always clear it first
-- **CORRECT** Command to use: `powershell "Get-Process -Id (Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue).OwningProcess -ErrorAction SilentlyContinue | Stop-Process -Force" 2>nul; npm run dev`
-- **DO NOT** use: `taskkill //F //IM node.exe > nul 2>&1 & npm run dev` (this doesn't work properly)
+- **CORRECT** Command to use: `lsof -ti:3000 | xargs kill -9 2>/dev/null; npm run dev`
 
 ## Project Context
 - NFT gaming dApp called Jackroll
