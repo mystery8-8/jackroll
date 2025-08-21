@@ -26,6 +26,8 @@ export function ConnectWallet() {
 
   if (authenticated && user) {
     const walletAddress = user.wallet?.address;
+    const twitterAccount = user.twitter;
+    const hasTwitter = !!twitterAccount;
     
     const handleProfileClick = () => {
       router.push('/profile');
@@ -39,13 +41,16 @@ export function ConnectWallet() {
             className="flex items-center gap-2 cursor-pointer hover:bg-muted/50 rounded-md p-2 transition-colors"
           >
             <Avatar className="h-8 w-8">
-              <AvatarImage src="" alt="Profile" />
+              <AvatarImage 
+                src={hasTwitter ? twitterAccount?.profilePictureUrl : ""} 
+                alt="Profile" 
+              />
               <AvatarFallback className="bg-[#f7931a] text-black text-xs">
                 <User className="h-4 w-4" />
               </AvatarFallback>
             </Avatar>
             <span className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+              {hasTwitter ? `@${twitterAccount?.username}` : `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`}
             </span>
           </div>
         )}

@@ -8,11 +8,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, User, Wallet, Trophy, TrendingUp, Clock, Copy, Share2, Users, Gift, Star, QrCode, Twitter, MessageCircle } from 'lucide-react';
+import { ArrowLeft, User, Wallet, Trophy, TrendingUp, Clock, Copy, Share2, Users, Gift, Star, QrCode, Twitter, MessageCircle, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function ProfilePage() {
-  const { authenticated, ready, user, logout } = usePrivy();
+  const { authenticated, ready, user, logout, linkTwitter, unlinkTwitter } = usePrivy();
   const router = useRouter();
 
   useEffect(() => {
@@ -68,6 +68,28 @@ export default function ProfilePage() {
   }
 
   const walletAddress = user.wallet?.address;
+  const twitterAccount = user.twitter;
+  const hasTwitter = !!twitterAccount;
+
+  const handleLinkTwitter = async () => {
+    try {
+      await linkTwitter();
+      toast.success('Twitter linked successfully!');
+    } catch (error) {
+      toast.error('Failed to link Twitter');
+      console.error('Twitter linking error:', error);
+    }
+  };
+
+  const handleUnlinkTwitter = async () => {
+    try {
+      await unlinkTwitter(twitterAccount?.subject || '');
+      toast.success('Twitter unlinked successfully!');
+    } catch (error) {
+      toast.error('Failed to unlink Twitter');
+      console.error('Twitter unlinking error:', error);
+    }
+  };
 
   // Mock data - in real app, fetch from backend/blockchain
   const mockStats = {
@@ -75,12 +97,49 @@ export default function ProfilePage() {
     wins: 23,
     losses: 24,
     winRate: 48.9,
-    totalVolume: 12.7,
+    currentNetworkVolume: 8.3, // Current network only
+    lifetimeVolume: 22.7, // Combined across all networks
     favoritePotType: 'Degen Pots',
     joinDate: 'November 2024',
-    reputation: 'Trusted Trader',
+    reputation: 'Admin',
     longestStreak: 7
   };
+
+  // Role progression logic
+  const getRoleProgress = (volume: number) => {
+    const roles = [
+      { name: 'Noob', requirement: 0, color: 'bg-gray-400' },
+      { name: 'Jade', requirement: 10, color: 'bg-green-500' },
+      { name: 'Ruby', requirement: 15, color: 'bg-red-500' },
+      { name: 'OG', requirement: 35, color: 'bg-yellow-500' }
+    ];
+    
+    // Find current role
+    let currentRole = roles[0];
+    for (let i = roles.length - 1; i >= 0; i--) {
+      if (volume >= roles[i].requirement) {
+        currentRole = roles[i];
+        break;
+      }
+    }
+    
+    // Find next role
+    const nextRole = roles.find(role => role.requirement > volume);
+    
+    // Calculate progress percentage
+    let progress = 0;
+    if (nextRole) {
+      const currentReq = currentRole.requirement;
+      const nextReq = nextRole.requirement;
+      progress = ((volume - currentReq) / (nextReq - currentReq)) * 100;
+    } else {
+      progress = 100; // Max role achieved
+    }
+    
+    return { currentRole, nextRole, progress: Math.min(progress, 100) };
+  };
+
+  const roleProgress = getRoleProgress(mockStats.lifetimeVolume);
 
   // Mock referral data
   const mockReferralData = {
@@ -132,317 +191,209 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Profile Info */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Main Profile Card */}
-            <Card>
-              <CardHeader className="text-center">
-                <div className="flex justify-center mb-4">
-                  <Avatar className="h-24 w-24">
-                    <AvatarImage src="" alt="Profile" />
-                    <AvatarFallback className="bg-[#f7931a] text-black text-2xl">
-                      <User className="h-12 w-12" />
-                    </AvatarFallback>
-                  </Avatar>
-                </div>
-                <CardTitle>Anonymous Trader</CardTitle>
-                <CardDescription>
-                  <Badge variant="secondary" className="bg-green-100 text-green-800">
+      <div className="max-w-4xl mx-auto px-6 py-12">
+        <div className="space-y-12">
+          
+          {/* Hero Profile Section */}
+          <div className="text-center space-y-8">
+            <div className="space-y-6">
+              <Avatar className="h-32 w-32 mx-auto">
+                <AvatarImage 
+                  src={hasTwitter && twitterAccount?.profilePictureUrl ? twitterAccount.profilePictureUrl : undefined} 
+                  alt="Profile" 
+                />
+                <AvatarFallback className="bg-[#f7931a] text-black text-3xl">
+                  <User className="h-16 w-16" />
+                </AvatarFallback>
+              </Avatar>
+              
+              <div className="space-y-3">
+                <h1 className="text-3xl font-bold">
+                  {hasTwitter ? (twitterAccount?.name || twitterAccount?.username) : 'Anonymous Trader'}
+                </h1>
+                
+                <div className="flex items-center justify-center gap-4">
+                  {hasTwitter && (
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <X className="h-4 w-4" />
+                      <span>@{twitterAccount?.username}</span>
+                    </div>
+                  )}
+                  <Badge className="bg-purple-100 text-purple-800 flex items-center gap-1 px-3 py-1">
+                    <span>👑</span>
                     {mockStats.reputation}
                   </Badge>
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <div className="text-sm text-muted-foreground mb-1">Wallet Address</div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-sm">
-                      {walletAddress?.slice(0, 8)}...{walletAddress?.slice(-8)}
-                    </span>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => walletAddress && handleCopyAddress(walletAddress)}
-                      className="h-6 w-6 p-0"
-                    >
-                      <Copy className="h-3 w-3" />
-                    </Button>
-                  </div>
                 </div>
-                
-                <Separator />
-                
-                <div>
-                  <div className="text-sm text-muted-foreground mb-1">Member Since</div>
-                  <div className="text-sm">{mockStats.joinDate}</div>
-                </div>
-                
-                <div>
-                  <div className="text-sm text-muted-foreground mb-1">Favorite Game Mode</div>
-                  <div className="text-sm">{mockStats.favoritePotType}</div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Quick Stats */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Quick Stats</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Win Rate</span>
-                  <span className="font-semibold text-green-600">{mockStats.winRate}%</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Total Volume</span>
-                  <span className="font-semibold">{mockStats.totalVolume} ETH</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Longest Streak</span>
-                  <span className="font-semibold">{mockStats.longestStreak} wins</span>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Stats & Activity */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Performance Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Card>
-                <CardContent className="p-4 text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <Trophy className="h-5 w-5 text-[#f7931a]" />
-                  </div>
-                  <div className="text-2xl font-bold">{mockStats.totalPots}</div>
-                  <div className="text-xs text-muted-foreground">Total Pots</div>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardContent className="p-4 text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <TrendingUp className="h-5 w-5 text-green-500" />
-                  </div>
-                  <div className="text-2xl font-bold text-green-600">{mockStats.wins}</div>
-                  <div className="text-xs text-muted-foreground">Wins</div>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardContent className="p-4 text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <div className="h-5 w-5 bg-red-500 rounded-full" />
-                  </div>
-                  <div className="text-2xl font-bold text-red-600">{mockStats.losses}</div>
-                  <div className="text-xs text-muted-foreground">Losses</div>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardContent className="p-4 text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <Wallet className="h-5 w-5 text-[#f7931a]" />
-                  </div>
-                  <div className="text-2xl font-bold">{mockStats.totalVolume}</div>
-                  <div className="text-xs text-muted-foreground">ETH Volume</div>
-                </CardContent>
-              </Card>
+              </div>
             </div>
 
-            {/* Recent Activity */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Recent Activity</CardTitle>
-                <CardDescription>Your latest pot participations</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {[1, 2, 3, 4, 5].map((_, i) => (
-                    <div key={i} className="flex items-center justify-between py-2 border-b border-border last:border-b-0">
-                      <div className="flex items-center gap-3">
-                        <div className={`h-2 w-2 rounded-full ${i % 2 === 0 ? 'bg-green-500' : 'bg-red-500'}`} />
-                        <div>
-                          <div className="font-medium text-sm">
-                            {i % 2 === 0 ? 'Won' : 'Lost'} Pot #{Math.floor(Math.random() * 1000)}
-                          </div>
-                          <div className="text-xs text-muted-foreground">
-                            {i % 3 === 0 ? 'Degen Pot' : 'Jacked Pot'} • {Math.random().toFixed(2)} ETH
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-xs text-muted-foreground flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        {Math.floor(Math.random() * 24)}h ago
-                      </div>
-                    </div>
-                  ))}
+            {/* Key Stats */}
+            <div className="grid grid-cols-4 gap-8 max-w-2xl mx-auto">
+              <div className="text-center">
+                <div className="text-2xl font-bold">{mockStats.totalPots}</div>
+                <div className="text-sm text-muted-foreground">Pots</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-600">{mockStats.wins}</div>
+                <div className="text-sm text-muted-foreground">Wins</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold">{mockStats.lifetimeVolume} ETH</div>
+                <div className="text-sm text-muted-foreground">Lifetime Volume</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-600">{mockStats.winRate}%</div>
+                <div className="text-sm text-muted-foreground">Win Rate</div>
+              </div>
+            </div>
+
+            {/* Role Progress Bar - Only for non-Admin/Mod users */}
+            {mockStats.reputation !== 'Admin' && mockStats.reputation !== 'Mod' && (
+              <div className="max-w-md mx-auto">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium">{roleProgress.currentRole.name}</span>
+                  {roleProgress.nextRole && (
+                    <span className="text-sm text-muted-foreground">{roleProgress.nextRole.name}</span>
+                  )}
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Referral Dashboard */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Referral Program - "Bring Your Crew"</CardTitle>
-                <CardDescription>Earn rewards by inviting friends to JackRoll</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                {/* Referral Code & Sharing */}
-                <div className="space-y-4">
-                  <div>
-                    <div className="text-sm font-medium mb-2">Your Referral Code</div>
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 bg-muted p-3 rounded-md font-mono text-sm">
-                        {mockReferralData.referralCode}
-                      </div>
-                      <Button
-                        size="sm"
-                        onClick={() => handleCopyReferralCode(mockReferralData.referralCode)}
-                        className="bg-[#f7931a] hover:bg-[#e8860f] text-black"
-                      >
-                        <Copy className="h-4 w-4 mr-1" />
-                        Copy Link
-                      </Button>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => handleShareToTwitter(mockReferralData.referralCode)}
-                      className="flex-1"
-                    >
-                      <Twitter className="h-4 w-4 mr-2" />
-                      Share on X
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => handleShareToDiscord(mockReferralData.referralCode)}
-                      className="flex-1"
-                    >
-                      <MessageCircle className="h-4 w-4 mr-2" />
-                      Discord
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="flex-1"
-                    >
-                      <QrCode className="h-4 w-4 mr-2" />
-                      QR Code
-                    </Button>
-                  </div>
-                </div>
-
-                <Separator />
-
-                {/* Referral Stats */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="text-center space-y-1">
-                    <div className="text-2xl font-bold text-[#f7931a]">{mockReferralData.totalReferrals}</div>
-                    <div className="text-xs text-muted-foreground">Total Referrals</div>
-                  </div>
-                  <div className="text-center space-y-1">
-                    <div className="text-2xl font-bold text-green-600">{mockReferralData.activeReferrals}</div>
-                    <div className="text-xs text-muted-foreground">Active This Month</div>
-                  </div>
-                  <div className="text-center space-y-1">
-                    <div className="text-2xl font-bold">{mockReferralData.totalEarnings} ETH</div>
-                    <div className="text-xs text-muted-foreground">Total Earned</div>
-                  </div>
-                  <div className="text-center space-y-1">
-                    <div className="text-2xl font-bold">{mockReferralData.referralVolume} ETH</div>
-                    <div className="text-xs text-muted-foreground">Referred Volume</div>
-                  </div>
-                </div>
-
-                <Separator />
-
-                {/* Tier Progress */}
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium">Referral Tier: {mockReferralData.tier}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {mockReferralData.nextTierProgress}% to Silver Tier
-                      </div>
-                    </div>
-                    <Badge variant="secondary" className="bg-amber-100 text-amber-800">
-                      {mockReferralData.tier}
-                    </Badge>
-                  </div>
-                  <div className="w-full bg-muted rounded-full h-2">
+                
+                {/* Apple-inspired progress bar */}
+                <div className="relative">
+                  <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                     <div 
-                      className="bg-[#f7931a] h-2 rounded-full transition-all duration-300"
-                      style={{ width: `${mockReferralData.nextTierProgress}%` }}
+                      className="h-full bg-[#f7931a] rounded-full transition-all duration-700 ease-out"
+                      style={{ width: `${roleProgress.progress}%` }}
                     />
                   </div>
-                </div>
-
-                <Separator />
-
-                {/* Achievements */}
-                <div className="space-y-3">
-                  <div className="font-medium">Referral Achievements</div>
-                  <div className="grid gap-2">
-                    {mockReferralData.achievements.map((achievement) => (
-                      <div 
-                        key={achievement.id}
-                        className={`flex items-center gap-3 p-2 rounded-md ${
-                          achievement.unlocked ? 'bg-green-50 border border-green-200' : 'bg-muted/50'
+                  
+                  {/* Progress dots */}
+                  <div className="absolute top-0 left-0 w-full h-2 flex justify-between items-center">
+                    {[0, 33.33, 66.66, 100].map((position, index) => (
+                      <div
+                        key={index}
+                        className={`w-1 h-1 rounded-full ${
+                          roleProgress.progress >= position 
+                            ? 'bg-[#f7931a]' 
+                            : 'bg-gray-300'
                         }`}
-                      >
-                        <div className={`h-8 w-8 rounded-full flex items-center justify-center ${
-                          achievement.unlocked ? 'bg-green-500' : 'bg-muted-foreground/20'
-                        }`}>
-                          <Star className={`h-4 w-4 ${achievement.unlocked ? 'text-white' : 'text-muted-foreground'}`} />
-                        </div>
-                        <div className="flex-1">
-                          <div className={`font-medium text-sm ${achievement.unlocked ? 'text-green-700' : 'text-muted-foreground'}`}>
-                            {achievement.name}
-                          </div>
-                          <div className="text-xs text-muted-foreground">
-                            {achievement.description}
-                          </div>
-                        </div>
-                      </div>
+                        style={{ 
+                          marginLeft: index === 0 ? '0' : '-2px',
+                          marginRight: index === 3 ? '0' : '-2px'
+                        }}
+                      />
                     ))}
                   </div>
                 </div>
+                
+                {roleProgress.nextRole && (
+                  <div className="text-xs text-muted-foreground text-center mt-2">
+                    {(roleProgress.nextRole.requirement - mockStats.lifetimeVolume).toFixed(1)} ETH to {roleProgress.nextRole.name}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
 
-                <Separator />
-
-                {/* Recent Referrals */}
-                <div className="space-y-3">
-                  <div className="font-medium">Recent Referrals</div>
-                  <div className="space-y-2">
-                    {mockReferralData.recentReferrals.map((referral, i) => (
-                      <div key={i} className="flex items-center justify-between py-2 border-b border-border last:border-b-0">
-                        <div className="flex items-center gap-3">
-                          <div className={`h-2 w-2 rounded-full ${referral.active ? 'bg-green-500' : 'bg-gray-400'}`} />
-                          <div>
-                            <div className="font-medium text-sm font-mono">{referral.address}</div>
-                            <div className="text-xs text-muted-foreground">
-                              Joined {referral.joinDate} • {referral.volume} ETH volume
-                            </div>
-                          </div>
-                        </div>
-                        <Badge variant={referral.active ? "default" : "secondary"}>
-                          {referral.active ? "Active" : "Inactive"}
-                        </Badge>
-                      </div>
-                    ))}
+          {/* Referral Section */}
+          <Card>
+            <CardHeader className="text-center pb-8">
+              <CardTitle className="text-2xl">Bring Your Crew</CardTitle>
+              <CardDescription className="text-lg">Share your code, earn together</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-8">
+              
+              {/* Referral Code */}
+              <div className="text-center space-y-4">
+                <div className="bg-muted p-6 rounded-lg">
+                  <div className="font-mono text-2xl font-bold tracking-wider">
+                    {mockReferralData.referralCode}
                   </div>
                 </div>
+                <Button
+                  onClick={() => handleCopyReferralCode(mockReferralData.referralCode)}
+                  className="bg-[#f7931a] hover:bg-[#e8860f] text-black font-medium px-8"
+                  size="lg"
+                >
+                  <Copy className="h-4 w-4 mr-2" />
+                  Copy Link
+                </Button>
+              </div>
+
+              {/* Share Options */}
+              <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
+                <Button
+                  variant="outline"
+                  onClick={() => handleShareToTwitter(mockReferralData.referralCode)}
+                  size="lg"
+                >
+                  <X className="h-4 w-4 mr-2" />
+                  Share on X
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handleShareToDiscord(mockReferralData.referralCode)}
+                  size="lg"
+                >
+                  <MessageCircle className="h-4 w-4 mr-2" />
+                  Discord
+                </Button>
+              </div>
+
+              {/* Stats Grid */}
+              <div className="grid grid-cols-2 gap-8 pt-4 max-w-md mx-auto">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-[#f7931a]">{mockReferralData.totalReferrals}</div>
+                  <div className="text-sm text-muted-foreground">Friends Joined</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-green-600">{mockReferralData.totalEarnings} ETH</div>
+                  <div className="text-sm text-muted-foreground">Total Earned</div>
+                </div>
+              </div>
               </CardContent>
             </Card>
-          </div>
+
+          {/* Settings Section */}
+          <Card>
+            <CardHeader className="text-center pb-6">
+              <CardTitle className="text-xl">Account Settings</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              
+              {/* Social Connection */}
+              <div className="text-center space-y-4">
+                {hasTwitter ? (
+                  <div className="flex items-center justify-center gap-3">
+                    <X className="h-4 w-4" />
+                    <span>@{twitterAccount?.username}</span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleUnlinkTwitter}
+                    >
+                      Disconnect
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <Button
+                      onClick={handleLinkTwitter}
+                      variant="outline"
+                      size="lg"
+                    >
+                      <X className="h-4 w-4 mr-2" />
+                      Connect X (Optional)
+                    </Button>
+                    <p className="text-sm text-muted-foreground">
+                      Privacy respected - stay anonymous if you prefer
+                    </p>
+                  </div>
+                )}
+              </div>
+              
+            </CardContent>
+          </Card>
+
         </div>
       </div>
     </div>

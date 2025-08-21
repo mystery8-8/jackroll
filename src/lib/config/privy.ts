@@ -12,7 +12,7 @@ export const privyConfig: PrivyClientConfig = {
       landingHeader: 'Welcome to JackRoll',
       landingSubheader: 'Connect your wallet to start playing',
     },
-    loginMethods: ['wallet', 'email'],
+    loginMethods: ['wallet', 'email', 'twitter'],
     defaultChain: sepolia,
     supportedChains: [mainnet, sepolia, polygon],
     embeddedWallets: {

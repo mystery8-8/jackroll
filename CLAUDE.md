@@ -21,10 +21,19 @@
 - Let user learn from the process and correct any mistakes
 - Remember that AI can hallucinate - user needs to verify approach
 
+## Critical Reference Instructions
+- **ALWAYS** read README.md before making architectural or business logic decisions
+- **NEVER** assume requirements - verify against README.md specifications
+- **DOUBLE-CHECK** user types, fee structures, and system requirements in README.md
+- Inaccurate information costs time and money - verify everything against documentation
+
 ## Development Server Instructions
 - **ALWAYS** use port 3000 for development server
-- Kill any processes using port 3000 before starting dev server
-- User prefers consistent port 3000 for all development
+- **ALWAYS** kill port 3000 processes before starting dev server automatically
+- **NEVER** ask user to kill processes - do it in ONE command
+- Port 3000 sometimes gets cached, so always clear it first
+- **CORRECT** Command to use: `powershell "Get-Process -Id (Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue).OwningProcess -ErrorAction SilentlyContinue | Stop-Process -Force" 2>nul; npm run dev`
+- **DO NOT** use: `taskkill //F //IM node.exe > nul 2>&1 & npm run dev` (this doesn't work properly)
 
 ## Project Context
 - NFT gaming dApp called Jackroll
