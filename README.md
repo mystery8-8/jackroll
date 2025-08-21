@@ -97,53 +97,54 @@ JackRoll uses a wallet-centric identity system where connecting your wallet crea
 - **Security**: Private key ownership provides maximum security
 - **Transparency**: All actions are tied to verifiable on-chain addresses
 
-### 4.2 User Types & Ranking System
+### 4.2 User Types/roels & Ranking System
 
-**JackRoll User Hierarchy:**
+**JackRoll User Role  Hierarchy:**
 
 The platform features a comprehensive user ranking system that determines platform fees, privileges, and social status:
 
-**🟢 Noob (Default)**
-- **Ethereum Fee**: 5% on all pot participations
-- **Monad Fee**: 0% (always free)
-- **Requirements**: Default status for new users
-- **Benefits**: Full platform access, learning resources
-- **Badge**: Green "N" badge in chat and profile
-
-**🔵 OG (Original Gangster)**
-- **Ethereum Fee**: 3% on all pot participations
-- **Monad Fee**: 0% (always free)
-- **Requirements**: 50+ total pot participations OR $10K+ volume
-- **Benefits**: Priority queue access, exclusive OG chat channel
-- **Badge**: Blue "OG" badge with special animation
-
-**🟣 Admin**
+**(JackRoll logo)  Admin**
 - **Ethereum Fee**: 0% on all pot participations
 - **Monad Fee**: 0% (always free)
-- **Requirements**: Platform administrators and core team members
+- **Requirements**: Platform administrators and core hand picked team members
 - **Benefits**: Full platform controls, admin dashboard access
-- **Badge**: Purple "A" badge with crown icon
+- **Badge**: JackRoll logo badge with crown icon
 
-**🟡 Mod (Moderator)**
-- **Ethereum Fee**: 1% on all pot participations
+**🧙‍♂️ Mod (Moderator above all but below admin)**
+- **Ethereum Fee**: 0% on all pot participations
 - **Monad Fee**: 0% (always free)
-- **Requirements**: Community-selected moderators
+- **Requirements**: Selected by admin
 - **Benefits**: Chat moderation powers, exclusive mod tools
-- **Badge**: Yellow "M" badge with shield icon
+- **Badge**: 🧙‍♂️  badge with shield icon
 
-**🔴 Ruby (Premium Tier)**
-- **Ethereum Fee**: 2% on all pot participations
+**👑 OG (Elite Tier)**
+- **Ethereum Fee**: 0% on all pot participations
 - **Monad Fee**: 0% (always free)
-- **Requirements**: $50K+ total volume OR community nomination
-- **Benefits**: VIP support, early feature access, Ruby lounge
+- **Requirements**: 35 ETH volume or hand picked by Admin or referred 1000 users.
+- **Benefits**: tba
+- **Badge**: King crown badge with special animation
+
+** Ruby (Premium Tier)**
+- **Ethereum Fee**: 0.88% on all pot participations
+- **Monad Fee**: 0% (always free)
+- **Requirements**: 15 ETH total volume.
+- **Benefits**: tba
 - **Badge**: Red ruby gem icon with sparkle effects
 
-**🟢 Jade (Elite Tier)**
-- **Ethereum Fee**: 1% on all pot participations
+** Jade (below ruby but above noob Tier)**
+- **Ethereum Fee**: 1.88% on all pot participations
 - **Monad Fee**: 0% (always free)
-- **Requirements**: $100K+ total volume AND community reputation score
-- **Benefits**: Revenue sharing, platform governance voting
+- **Requirements**: 10 ETH Volume. 
+- **Benefits**: tba
 - **Badge**: Green jade gem icon with premium glow effect
+
+**🍼 Noob (Default)**
+- **Ethereum Fee**: 2.88% on all pot participations
+- **Monad Fee**: 0% (always free)
+- **Requirements**: Default status for all new users
+- **Benefits**: tba
+- **Badge**: baby bottle "🍼" badge in chat and profile
+
 
 **Ranking Progression:**
 - Automatic upgrades based on volume and participation
@@ -241,6 +242,11 @@ When guests attempt restricted actions, they encounter contextual prompts:
   - Reputation score based on community interactions
 - **NFT Portfolio**: Cross-chain NFT collection display
 - **Transaction History**: Complete multi-chain pot participation records
+- **On-Chain Game History**: All wins/losses permanently stored on blockchain for transparency
+  - Individual pot results with timestamps
+  - Verifiable proof of all gaming outcomes
+  - Immutable record of user performance across all chains
+  - Complete audit trail of NFT stakes and winnings
 - **Fee Savings Tracker**: Total fees saved on Monad vs Ethereum
 - **Referral Dashboard**: Enhanced with Twitter sharing integration
 
@@ -891,8 +897,8 @@ The JackRoll chat system now displays rich user information combining blockchain
 
 **Chat Message Format:**
 ```
-[@cryptoking] (OG) 🔵: Just won 5 ETH on that Monad pot! Zero fees FTW! 🎰
-[0x1a2b...3c4d] (Noob) 🟢: How do I switch to Monad?
+ OG 🔵: Just won 5 ETH on that Monad pot! Zero fees FTW! 🎰
+Noob 🟢: How do I switch to Monad?
 [@nftwhale] (Ruby) 🔴: Teaching newbies in the Ruby lounge if anyone wants tips
 [Admin Team] (Admin) 🟣 👑: New high-stakes pots just launched on both chains!
 ```
